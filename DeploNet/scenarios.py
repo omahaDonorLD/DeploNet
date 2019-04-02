@@ -14,31 +14,33 @@ def generate_victim_positions(num_victims):
 
 # victims's positions based on paper DESE		
 def generate_victim_positions_traces():
-    """ used in paper DESE and applied soft computing"""
-    #global list_victims
-    global_variables.list_victims = list()
-    print "Generate the positions of victims"
-    x = open("x_positions.txt",'r')
-    y = open("y_positions.txt", 'r')
-    ident = 0
-    for i, j in zip(x, y):
-        global_variables.list_victims.append(global_variables.Victim(ident,float(i),float(j)))
-        ident = ident + 1
-        #print ident
-    
+	""" used in paper DESE and applied soft computing"""
+	#global list_victims
+	global_variables.list_victims = list()
+	print("Generate the positions of victims")
+	x = open("x_positions.txt",'r')
+	y = open("y_positions.txt", 'r')
+	ident = 0
+	for i, j in zip(x, y):
+		global_variables.list_victims.append(global_variables.Victim(ident,float(i),float(j)))
+		ident = ident + 1
+		#print(ident)
+	
 def partial_knowledge_generation(knowledge):
-    """ generates a new list of victims based on knowledge parameter and the complete list of victims"""
-    #global list_victims
-    #global list_partial_victims
-    global_variables.list_partial_victims = list()         
-    new_number_victims = float(knowledge) * len(global_variables.list_victims)
-    new_number_victims = int(new_number_victims) # it must be an integer
-    while len(global_variables.list_partial_victims) < new_number_victims:
-        new_victim = global_variables.list_victims[random.randint(0,(new_number_victims -1))]
-        if new_victim in global_variables.list_partial_victims:
-		pass
-        else:
-		global_variables.list_partial_victims.append(new_victim)
+	""" generates a new list of victims based on knowledge parameter and the complete list of victims"""
+	#global list_victims
+	#global list_partial_victims
+
+	## CAREFUL !!! : 2 types of victims : partial and true lists
+	global_variables.list_partial_victims = list()
+	new_number_victims = float(knowledge) * len(global_variables.list_victims)
+	new_number_victims = int(new_number_victims) # it must be an integer
+	while len(global_variables.list_partial_victims) < new_number_victims:
+		new_victim = global_variables.list_victims[random.randint(0,(new_number_victims -1))]
+		if new_victim in global_variables.list_partial_victims:
+			pass
+		else:
+			global_variables.list_partial_victims.append(new_victim)
 
 def copy_drones_positions():
 	""" copies drones positions from the file to be used in local optimization"""

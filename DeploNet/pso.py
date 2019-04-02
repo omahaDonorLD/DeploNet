@@ -25,7 +25,7 @@ from deap import benchmarks
 from deap import creator
 from deap import tools
 
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+##creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Particle", list, fitness=creator.FitnessMax, speedx=list, speedy = list, 
     smin=None, smax=None, best=None, record = list, record_best = list, identificador = int)
 # velocidad de la particula, velocidad minima, velocidad maxima, y mejor estado en el que ha estado
@@ -33,7 +33,7 @@ creator.create("Particle", list, fitness=creator.FitnessMax, speedx=list, speedy
 identificador_global = 0
 
 def generate(size, pmin, pmax, smin, smax):
-	print "Generate the Particles"
+	print("Generate the Particles")
 	global identificador_global
 	part = creator.Particle(quality.init(size))
 	part.speedx = [random.uniform(smin, smax) for _ in range(size)]
@@ -66,8 +66,8 @@ def cal_dif(best, part):
 	list_x_best, list_y_best = get_cor(best)
 	list_x_part, list_y_part = get_cor(part)
 
-	print "best x %s" % list_x_best
-	print "part x %s" % list_x_part
+	print("best x %s" % list_x_best)
+	print("part x %s" % list_x_part)
 	
 	dif_x = map(operator.sub, list_x_best, list_x_part)
 	dif_y = map(operator.sub, list_y_best, list_y_part)
@@ -75,10 +75,10 @@ def cal_dif(best, part):
 
 # we have to check that the drones do not get out of the scenario
 def updateParticle(part, best, phi1, phi2):
-	print "UPDATE PARTICLES POSITIONS"
-	print "len part %d" % len(part)
-	print "phi1 %d" % phi1
-	print "phi2 %d" % phi2
+	print("UPDATE PARTICLES POSITIONS")
+	print("len part %d" % len(part))
+	print("phi1 %d" % phi1)
+	print("phi2 %d" % phi2)
 	u1 = list()
 	u2 = list()
 	for i in range(len(part)):
@@ -87,12 +87,12 @@ def updateParticle(part, best, phi1, phi2):
 	dif_local_x, dif_local_y = cal_dif(part.best, part)
 	dif_global_x, dif_global_y = cal_dif(best, part)
 
-	print "dif local x %s" % dif_local_x
-	print "dif global x %s" % dif_global_x
-	print "dif local y %s" % dif_local_y
-	print "dif global y %s" % dif_global_y
-	print "u1 %s" % u1
-	print "u2 %s" % u2
+	print("dif local x %s" % dif_local_x)
+	print("dif global x %s" % dif_global_x)
+	print("dif local y %s" % dif_local_y)
+	print("dif global y %s" % dif_global_y)
+	print("u1 %s" % u1)
+	print("u2 %s" % u2)
 
 	v_u1_x = map(operator.mul, u1, dif_local_x)
 	v_u2_x = map(operator.mul, u2, dif_global_x)
@@ -115,14 +115,14 @@ def updateParticle(part, best, phi1, phi2):
 			part.speedy[i] = part.smax
 	j= 0
 	for i in range(len(part)): # we update all the positions of the drones
-		print "x old %f" % part[i].node_x
-		print "y old %f" % part[i].node_y
+		print("x old %f" % part[i].node_x)
+		print("y old %f" % part[i].node_y)
 		part[i].node_x = part[i].node_x + part.speedx[j]
 		part[i].node_y = part[i].node_y + part.speedy[j]
 		j = j + 1
-		print "x new %f" % part[i].node_x
-		print "y new %f" % part[i].node_y
-	print "--------------------------------------------------------"
+		print("x new %f" % part[i].node_x)
+		print("y new %f" % part[i].node_y)
+	print("--------------------------------------------------------")
 
 	#part[:] = list(map(operator.add, part, part.speed))
 
@@ -143,50 +143,50 @@ def pso_algorithm():
 		part.best.fitness.values = -1, # iniciamos con un fitness negativo
 
 	for g in range(GEN):
-		print "-----------------------GENERATION %f -----------------------" % g
+		print("-----------------------GENERATION %f -----------------------" % g)
 		for part in pop:
 			part.fitness.values = toolbox.evaluate(part) # evaluamos todas las particulas
 			part.record.append(part.fitness.values)
 			part.record_best.append(part.best.fitness.values)
-			print "**** particle %d" % part.identificador
-			print "**** FITNESS OBTAINED %f" % part.fitness.values
+			print("**** particle %d" % part.identificador)
+			print("**** FITNESS OBTAINED %f" % part.fitness.values)
 
 			if part.best.fitness < part.fitness: # check the best particle position
-				print "IMPROVED LOCAL"
-				print "++> best local stored %f" % part.best.fitness.values
+				print("IMPROVED LOCAL")
+				print("++> best local stored %f" % part.best.fitness.values)
 				part.best = creator.Particle(part)
 				part.best.fitness.values = part.fitness.values
-				print "++> new best local %f" % part.best.fitness.values
+				print("++> new best local %f" % part.best.fitness.values)
 				x_l, y_l = get_cor(part.best)
-				print "++> coordinates of the best local %s" % x_l
+				print("++> coordinates of the best local %s" % x_l)
 				x_p, y_p = get_cor(part)
-				print "++> coordinates of the particle %s" % x_p
+				print("++> coordinates of the particle %s" % x_p)
 			else: 
-				print "dont improved"
-				print "best local stored %f" % part.best.fitness.values
+				print("dont improved")
+				print("best local stored %f" % part.best.fitness.values)
 				x_l, y_l = get_cor(part.best)
-				print "++> coordinates of the best local %s" % x_l
+				print("++> coordinates of the best local %s" % x_l)
 				x_p, y_p = get_cor(part)	
-				print "++> coodinates of the particle %s" % x_p
+				print("++> coodinates of the particle %s" % x_p)
 
 			if not best or best.fitness < part.fitness: # check the best particle
 				if best:
-					print "--> the best global fitness stored %f" % best.fitness.values
+					print("--> the best global fitness stored %f" % best.fitness.values)
 				best = creator.Particle(part)
 				best.fitness.values = part.fitness.values
-				print "--> the best global fitness %f" % best.fitness.values
+				print("--> the best global fitness %f" % best.fitness.values)
 				list_max.append(part.fitness.values) # store the best particles so far
 			
 			toolbox.update(part, best)
 	
 	for part in pop:
-		print "Particle %d" % part.identificador
-		print "fitnes for each iteration"
-		print part.record
-		print "the best local fitness"
-		print part.record_best
+		print("Particle %d" % part.identificador)
+		print("fitnes for each iteration")
+		print(part.record)
+		print("the best local fitness")
+		print(part.record_best)
 
-	print "?????? best fitness %f" % best.fitness.values
+	print("?????? best fitness %f" % best.fitness.values)
 	return best, best.fitness.values[0] 
         # Gather all the fitnesses in one list and print the stats
         #logbook.record(gen=g, evals=len(pop), **stats.compile(pop))

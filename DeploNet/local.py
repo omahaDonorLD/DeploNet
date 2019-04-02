@@ -27,7 +27,7 @@ def choose_directions_single(l2, max_speed):
 	""" It selects a new moving direction for a drone """
 	random.seed()
 	selected_drone = random.randint(0, (len(l2)-1))
-	#print selected_drone
+	#print(selected_drone)
 	l2[selected_drone].angle = random.random() * 2 * math.pi
 	l2[selected_drone].speed = random.random() * max_speed
 	return selected_drone
@@ -38,7 +38,7 @@ def update_drones_positions_single(l1, selected):
 	l1[selected].previous_y = l1[selected].node_y
 	l1[selected].node_x =  l1[selected].node_x +  l1[selected].speed * math.cos(l1[selected].angle)
 	if  l1[selected].node_x > 1000 or  l1[selected].node_x < 0:
-		 l1[selected].node_x = l1[selected].previous_x
+		l1[selected].node_x = l1[selected].previous_x
 
 	l1[selected].node_y = l1[selected].node_y +  l1[selected].speed * math.sin(l1[selected].angle)
 	if  l1[selected].node_y > 1000 or  l1[selected].node_y < 0:
@@ -72,7 +72,7 @@ def update_drones_positions(l1, tabu):
 				j.node_y = j.previous_y
 		else:
 			pass
-			 #i.positions.append(current_position)
+			#i.positions.append(current_position)
 
 def step_back(l1, max_speed):
 	""" This function place back the drones in the previous position and choose a new moving direction"""
@@ -116,7 +116,7 @@ def hill_climbing(lista_drones, global_max):
 	prueba = lista_drones
 	best_time = 0
 
-	print "---------- START CLIMBING OPTIMIZATION ----------"
+	print("---------- START CLIMBING OPTIMIZATION ----------")
 
 	for i in range (0, simulation_time):
 		update_drones_positions(lista_drones, 0)
@@ -125,34 +125,34 @@ def hill_climbing(lista_drones, global_max):
 		if (current_quality <= global_max):
 			#selected= step_back_single(lista_drones, selected, max_speed)
 			step_back(lista_drones, max_speed)
-			#print "go back"
+			#print("go back")
 		else:
-			print "----------------previous quality %f" % global_max
+			print("----------------previous quality %f" % global_max)
 			global_max = current_quality
 			#records.append(global_max)
 			prueba = copy.deepcopy(lista_drones)
-			print "----------------new quality %f" % global_max
+			print("----------------new quality %f" % global_max)
 			plots.print_drones_data(lista_drones, 0)
 			best_time = i # we update the time at which we find the best solution so far
-			print "-----------------------------------------------"
-			print "-----------------------------------------------"
+			print("-----------------------------------------------")
+			print("-----------------------------------------------")
 	
 	# we print some information about how the positions are updated.
-	print "quality before hill climbing %f" % first_max
-	print "List of victims covered %s" % quality.calc_victims_covered(max_list) 
-	print "total number of victims covered %d" % len(quality.calc_victims_covered(max_list))
-	print "-------INITIAL POSITIONS----------------------"
+	print("quality before hill climbing %f" % first_max )
+	print("List of victims covered %s" % quality.calc_victims_covered(max_list) )
+	print("total number of victims covered %d" % len(quality.calc_victims_covered(max_list)) )
+	print("-------INITIAL POSITIONS----------------------" )
 	plots.print_drones_data(max_list, 0)
-	print "----------------------------------------------"
-	print "----------------------------------------------" 
-	
-	print "final quality hill climbing %f" % global_max
-	print "List of victims covered %s" % quality.calc_victims_covered(prueba)
-	print "total number of victims covered %d" % len(quality.calc_victims_covered(prueba))
-	print "-------FINAL POSITIONS----------------------"
+	print("----------------------------------------------" )
+	print("----------------------------------------------" )
+
+	print("final quality hill climbing %f" % global_max )
+	print("List of victims covered %s" % quality.calc_victims_covered(prueba) )
+	print("total number of victims covered %d" % len(quality.calc_victims_covered(prueba)) )
+	print("-------FINAL POSITIONS----------------------")
 	plots.print_drones_data(prueba, 0)
-	print "----------------------------------------------"
-	print "----------------------------------------------"
+	print("----------------------------------------------")
+	print("----------------------------------------------")
 	return prueba, records
 
 # this is not implemented --> FUTURE WORK
@@ -173,7 +173,7 @@ def tabu_search(lista_drones, global_max):
 	current_quality = 0.0
 	repetido = 0
 
-	print "---------- START TABU SEARCH OPTIMIZATION ----------"
+	print("---------- START TABU SEARCH OPTIMIZATION ----------")
 
 	for i in range (0, simulation_time):
 		update_drones_positions(lista_drones, 0)
@@ -181,41 +181,41 @@ def tabu_search(lista_drones, global_max):
 		current_positions = miscelleneous.get_positions(lista_drones)
 		if current_positions in tabu_list:
 			repetido = repetido + 1
-			print "REPETIDOOOOOOOOOOOOOOOOOOOOOOOO"
+			print("REPETIDOOOOOOOOOOOOOOOOOOOOOOOO")
 		else:
 			if (current_quality <= global_max):
 				step_back(lista_drones, max_speed)
-				#print "go back"
+				#print("go back")
 			else:
-				print current_positions
+				print(current_positions)
 				update_movements(lista_drones)
 				movement_list.append(current_positions)
-				print "----------------previous quality %f" % global_max
+				print("----------------previous quality %f" % global_max )
 				global_max = current_quality
 				records.append(global_max)
 				prueba = copy.deepcopy(lista_drones)
-				print "----------------new quality %f" % global_max
+				print("----------------new quality %f" % global_max )
 				plots.print_drones_data(lista_drones, 0)
-				print "-----------------------------------------------"
-				print "-----------------------------------------------"
+				print("-----------------------------------------------" )
+				print("-----------------------------------------------" )
 		tabu_list.append(current_positions)
 
-	print "repetido %d" % repetido
-	print "quality before tabu search %f" % first_max
-	print "List of victims covered %s" % quality.calc_victims_covered(max_list) 
-	print "total number of victims covered %d" % len(quality.calc_victims_covered(max_list))
-	print "-------INITIAL POSITIONS----------------------"
+	print("repetido %d" % repetido)
+	print("quality before tabu search %f" % first_max)
+	print("List of victims covered %s" % quality.calc_victims_covered(max_list) )
+	print("total number of victims covered %d" % len(quality.calc_victims_covered(max_list)) )
+	print("-------INITIAL POSITIONS----------------------")
 	plots.print_drones_data(max_list, 0)
-	print "----------------------------------------------"
-	print "----------------------------------------------" 
+	print("----------------------------------------------")
+	print("----------------------------------------------")
 	
-	print "final quality tabu search %f" % global_max
-	print "List of victims covered %s" % quality.calc_victims_covered(prueba)
-	print "total number of victims covered %d" % len(quality.calc_victims_covered(prueba))
-	print "-------FINAL POSITIONS----------------------"
+	print("final quality tabu search %f" % global_max)
+	print("List of victims covered %s" % quality.calc_victims_covered(prueba))
+	print("total number of victims covered %d" % len(quality.calc_victims_covered(prueba)))
+	print("-------FINAL POSITIONS----------------------")
 	plots.print_drones_data(prueba, 0)
-	print "----------------------------------------------"
-	print "----------------------------------------------"
+	print("----------------------------------------------")
+	print("----------------------------------------------")
 	plots.plot_movements(lista_drones)
 	return prueba, records
 
@@ -225,16 +225,16 @@ def calculate_annealing_probability(temperature, current_quality, global_max):
 	g1 = global_max
 	c1 = current_quality
 	aux =0
-	print "temperature %f"  % temperature
+	print("temperature %f"  % temperature)
 	if temperature > 0:
 		aux = (g1 - c1)/temperature
-		print "aux %f" % aux
+		print("aux %f" % aux)
 		probability = math.exp(-1* float(aux))
 	else:
 		probability = 0 # frozen solution
 	if probability > 1:
 		probability = 1
-	print "PROBABILITY %f" % probability
+	print("PROBABILITY %f" % probability)
 	return probability
 
 # this is not implemented --> FUTURE WORK
@@ -246,10 +246,10 @@ def update_annealing_temperature(temperature, deviation, simulation_time):
 	new_temperature = temperature - step
 	if new_temperature < 0:
 		new_temperature = 0
-	#print "tmax %f" % Tmax
-	#print "tmin %f" % Tmin
-	#print "simulation tome %d" % simulation_time
-	#print  "new temperatue %f" % new_temperature
+	#print("tmax %f" % Tmax)
+	#print("tmin %f" % Tmin)
+	#print("simulation tome %d" % simulation_time)
+	#print("new temperatue %f" % new_temperature)
 	return new_temperature 
 
 # this is not implemented --> FUTURE WORK
@@ -274,62 +274,62 @@ def simulated_annealing(lista_drones, global_max, deviation):
 	records_positions.append(max_list)
 	choose_directions(lista_drones, max_speed)
 
-	print "---------- START SIMULATED ANNEALING OPTIMIZATION ----------"
+	print("---------- START SIMULATED ANNEALING OPTIMIZATION ----------")
 	for i in range (0, simulation_time):
 		update_drones_positions(lista_drones)
 		current_quality,  = quality.evaluate(lista_drones)
 		if current_quality <= global_max2 and current_quality > 0:
 			probability = calculate_annealing_probability(temperature, current_quality, global_max2)
-			print probability
+			print(probability)
 			records_probability.append(probability)
 			#records_aux.append(aux) 
 			if (probability >= random.random()): # we should avoid non valid solutions
-				print "----------------accepting a WORSE solution--------"
-				print "----------------previous quality %f" % global_max2
+				print("----------------accepting a WORSE solution--------")
+				print("----------------previous quality %f" % global_max2)
 				global_max2 = current_quality
 				records.append(global_max2)
 				prueba = copy.deepcopy(lista_drones)
 				records_positions.append(prueba)
-				print "----------------new quality %f" % global_max2
+				print("----------------new quality %f" % global_max2)
 				plots.print_drones_data(lista_drones, 0)
-				print "-----------------------------------------------"
-				print "-----------------------------------------------"
+				print("-----------------------------------------------")
+				print("-----------------------------------------------")
 			else:
 				step_back(lista_drones, max_speed)
 		else:
 			if (current_quality > 0):
-				print "----------------accepting a BETTER solution--------"
-				print "----------------previous quality %f" % global_max2
+				print("----------------accepting a BETTER solution--------")
+				print("----------------previous quality %f" % global_max2)
 				global_max2 = current_quality
 				prueba = copy.deepcopy(lista_drones)
 				records.append(global_max2)
 				records_positions.append(prueba)
-				print "----------------new quality %f" % global_max2
+				print("----------------new quality %f" % global_max2 )
 				plots.print_drones_data(prueba, 0)
-				print "-----------------------------------------------"
-				print "-----------------------------------------------"
+				print("-----------------------------------------------")
+				print("-----------------------------------------------")
 
 		temperature = update_annealing_temperature(temperature, deviation, simulation_time)
 		records_temperature.append(temperature)
-		print "temperature %f" % temperature
+		print("temperature %f" % temperature)
 	
 	#plots.evolution_local(records_aux, "probability")
 	index = miscelleneous.find_max(records)
 
-	print "quality before simulated annealing %f" % first_max 
-	print "List of victims covered %s" % quality.calc_victims_covered(max_list) 
-	print "total number of victims covered %d" % len(quality.calc_victims_covered(max_list))
-	print "-------INITIAL POSITIONS----------------------"
+	print("quality before simulated annealing %f" % first_max )
+	print("List of victims covered %s" % quality.calc_victims_covered(max_list) )
+	print("total number of victims covered %d" % len(quality.calc_victims_covered(max_list)) )
+	print("-------INITIAL POSITIONS----------------------")
 	plots.print_drones_data(max_list, 0)
-	print "----------------------------------------------"
-	print "----------------------------------------------" 
+	print("----------------------------------------------")
+	print("----------------------------------------------")
 	
-	print "final quality simulated annealing %f" % records[index]
-	print "List of victims covered %s" % quality.calc_victims_covered(records_positions[index])
-	print "total number of victims covered %d" % len(quality.calc_victims_covered(records_positions[index]))
-	print "-------FINAL POSITIONS----------------------"
+	print("final quality simulated annealing %f" % records[index])
+	print("List of victims covered %s" % quality.calc_victims_covered(records_positions[index]) )
+	print("total number of victims covered %d" % len(quality.calc_victims_covered(records_positions[index])) )
+	print("-------FINAL POSITIONS----------------------")
 	plots.print_drones_data(records_positions[index], 0)
-	print "----------------------------------------------"
-	print "----------------------------------------------"
+	print("----------------------------------------------")
+	print("----------------------------------------------")
 	return records_positions[index], records
 
