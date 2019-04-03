@@ -97,7 +97,7 @@ def check_drones_conectivity(individual):
 	if len(labels) < len(individual):
 		return -1 # if not connected network
 	else:
-		return connections
+		return connections			
 
 def victims_coverage(individual):
 	""" It calculates the number of victims covered by the drones"""
