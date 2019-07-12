@@ -258,7 +258,7 @@ def migration_all_to_one(population_list, migration_rate):
 	for i in range(0,len(population_list)-2): # the last population is always the one tha applies the weighting function
 		population_list[-1].pop = population_list[-1].pop + population_list[i].select_migration_elitism(migration_rate)
 		
-def ga_multi_population(argument,i):
+def ga_multi_population(argument,type_algo,i,k):
 	""" this function implement the multi-objective genetic algorithm"""
 	random.seed() # seed for random numbers
 	
@@ -370,11 +370,11 @@ def ga_multi_population(argument,i):
 					notable_fits[g]=p.statistics()
 
 			## suppose here is where to evaluate each generations : best/worst results
-	prefix=""
+	prefix="res_stats/multi_population/"
 	if argument is None :
-		prefix="res_stats/usual"
+		prefix=prefix+"usual"+str(k)+"-"
 	else :
-		prefix="res_stats/preprocess"
+		prefix=prefix+"preprocess"+str(k)+"-"
 
 	#[print("here data in notable fits ", ele) for ele in notable_fits ]
 

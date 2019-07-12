@@ -85,7 +85,7 @@ toolbox.register("mutate2", swap_mutation)
 toolbox.register("mutate3", shift_mutation)
 
 # this is the actual implementation of the genetic algorithm
-def genetic_algorithm():
+def genetic_algorithm(infunction,i,k):
 	random.seed()
 	list_max = list()
 	convergence_generation = 0
@@ -96,6 +96,7 @@ def genetic_algorithm():
 	#n_individual = 60
 	n_individual = 60
 	#n_individual = 10
+	##CXPB, MUTPB, NGEN = 0.6, 0.05, 150
 	CXPB, MUTPB, NGEN = 0.6, 0.05, 150
 	
 	# initial population
@@ -116,6 +117,8 @@ def genetic_algorithm():
 	
 	
 	# Begin the evolution
+	if infunction == "genetic" :
+		notable_fits=[[] for i in range(NGEN)]
 	for g in range(NGEN):
 		print("-- Generation %i --" % g)
 		
@@ -163,6 +166,9 @@ def genetic_algorithm():
 		mean = sum(fits) / length
 		sum2 = sum(x*x for x in fits)
 		std = abs(sum2 / length - mean**2)**0.5
+
+		if infunction == "genetic" :
+			notable_fits[g]=[ min(fits), max(fits), mean, std ]
 		
 		print("  Min %s" % min(fits))
 		print("  Max %s" % max(fits))
@@ -173,6 +179,26 @@ def genetic_algorithm():
 		if ind.fitness.values > best_current_fitness:
 			best_current_fitness = ind.fitness.values
 			convergence_generation = g
+
+	prefix="res_stats/genetic/usual"+str(k)+"-"
+
+	#[print("here data in notable fits ", ele) for ele in notable_fits ]
+
+	##for g in range(NGEN):
+	if infunction == "genetic" :
+		f=open(prefix+str(i),"w")
+		for k in range(1,len(notable_fits)) :
+			strtowrite=""
+			for j in range(len(notable_fits[k])) :
+				if j == len(notable_fits[k])-1 :
+					strtowrite=strtowrite+str(notable_fits[k][j])
+				else :
+					strtowrite=strtowrite+str(notable_fits[k][j])+","
+			f.write(strtowrite)
+			f.write("\n")
+			## Note that there is a skip in the notable fits records that are due to the iteration for the migration
+			## print(" value is ", strtowrite)
+		f.close()
 
 	print("-- End of (successful) evolution --")
 	best_ind = tools.selBest(pop, 1)[0]

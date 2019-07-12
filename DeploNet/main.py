@@ -77,7 +77,7 @@ def only_global(f, type_algorithm, knowledge, fil, argument):
 	if type_algorithm == "genetic":
 		for i in range (0, iterations_genetic):
 			# 
-			individual, fitness, generation, evol_max, convergence = genetic.genetic_algorithm()
+			individual, fitness, generation, evol_max, convergence = genetic.genetic_algorithm("genetic",i,knowledge)
 			list_best_individuals.append(individual)
 			list_best_fitness.append(fitness)
 			list_generations.append(generation)
@@ -107,9 +107,9 @@ def only_global(f, type_algorithm, knowledge, fil, argument):
 			## print the iterations
 			print("Iteration genetic : ", i)
 			if len(argument) > 1 :## input : initial positions
-				res = ga_multi_population.ga_multi_population(argument,i)
+				res = ga_multi_population.ga_multi_population(argument,type_algorithm,i,knowledge)
 			else :## classic search with no individuals to start with
-				res = ga_multi_population.ga_multi_population(None,i)
+				res = ga_multi_population.ga_multi_population(None,type_algorithm,i,knowledge)
 			## 4 * iterations_genetic number of ga_multi_population : each node in the queue (ring schema)
 			## has THE SAME : iterations_genetic (30) results
 			for i,r in enumerate(res):
@@ -186,7 +186,7 @@ def only_global(f, type_algorithm, knowledge, fil, argument):
 	if type_algorithm == "multi_objective":
 		pareto_global = tools.ParetoFront()
 		for i in range (0, iterations_genetic):
-			pareto = ga_multi_objective.genetic_algorithm()
+			pareto = ga_multi_objective.genetic_algorithm("multi_objective",i,knowledge)
 			pareto_global.update(pareto)
 		plots.print_pareto(pareto_global, f)
 	#plots.evolution_global(list_evolution_max[index], type_global)
@@ -257,7 +257,7 @@ def global_plus_local(f):
 	scenarios.partial_knowledge_generation(knowledge)
 
 	for i in range (0, iterations_genetic):
-		individual, fitness, generation, evol_max = genetic.genetic_algorithm()
+		individual, fitness, generation, evol_max = genetic.genetic_algorithm("global_plus_local",i,knowledge)
 		list_best_individuals.append(individual)
 		list_best_fitness.append(fitness)
 		list_generations.append(generation)
@@ -357,7 +357,8 @@ def main():
 	start=time.time()
 	#global_plus_local(f)
 	##datos = pd.read_excel('simulation_dronet.xlsx', 'Hoja1', index_col=None, na_values=['NA'])
-	datos = pd.read_excel('short_simulation_deplonet.xlsx', 'Hoja1', index_col=None, na_values=['NA'])
+	##datos = pd.read_excel('short_simulation_deplonet.xlsx', 'Hoja1', index_col=None, na_values=['NA'])
+	datos = pd.read_excel('simulation_dronet.xlsx', 'Hoja1', index_col=None, na_values=['NA'])
 	#f = open(fil+"resultados.txt", 'w+')
 	f = open("resultados.txt", 'w+')
 	for i, row in datos.iterrows():
